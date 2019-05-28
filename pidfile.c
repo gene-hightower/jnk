@@ -1,16 +1,18 @@
-#include <bsd/libutil.h>
-#include <err.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
 
+#include <err.h>
+
+#include <bsd/libutil.h>
+
 int main()
 {
   pid_t otherpid;
 
-  struct pidfh* pfh = pidfile_open("/var/run/daemon.pid", 0600, &otherpid);
+  struct pidfh* pfh = pidfile_open("/tmp/daemon.pid", 0600, &otherpid);
   if (pfh == NULL) {
     if (errno == EEXIST) {
       errx(EXIT_FAILURE, "Daemon already running, pid: %jd.",
