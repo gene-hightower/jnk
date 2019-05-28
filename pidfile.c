@@ -34,18 +34,18 @@ int main()
 
   pidfile_write(pfh);
 
-  for (;;) {
-    /* Do work. */
-    childpid = fork();
-    switch (childpid) {
-    case -1: syslog(LOG_ERR, "Cannot fork(): %s.", strerror(errno)); break;
-    case 0:
-      pidfile_close(pfh);
-      /* Do child work. */
-      break;
-    default: syslog(LOG_INFO, "Child %jd started.", (intmax_t)childpid); break;
-    }
+  //  for (;;) {
+  /* Do work. */
+  childpid = fork();
+  switch (childpid) {
+  case -1: syslog(LOG_ERR, "Cannot fork(): %s.", strerror(errno)); break;
+  case 0:
+    pidfile_close(pfh);
+    /* Do child work. */
+    break;
+  default: syslog(LOG_INFO, "Child %jd started.", (intmax_t)childpid); break;
   }
+  //  }
 
   pidfile_remove(pfh);
   exit(EXIT_SUCCESS);
