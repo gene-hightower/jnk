@@ -8,10 +8,8 @@
 
 int main()
 {
-  struct pidfh* pfh;
-  pid_t         otherpid, childpid;
-
-  pfh = pidfile_open("/var/run/daemon.pid", 0600, &otherpid);
+  pid_t         otherpid;
+  struct pidfh* pfh = pidfile_open("/var/run/daemon.pid", 0600, &otherpid);
   if (pfh == NULL) {
     if (errno == EEXIST) {
       errx(EXIT_FAILURE, "Daemon already running, pid: %jd.",
@@ -36,7 +34,7 @@ int main()
 
   //  for (;;) {
   /* Do work. */
-  childpid = fork();
+  pid_t childpid = fork();
   switch (childpid) {
   case -1: syslog(LOG_ERR, "Cannot fork(): %s.", strerror(errno)); break;
   case 0:
