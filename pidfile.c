@@ -8,7 +8,8 @@
 
 int main()
 {
-  pid_t         otherpid;
+  pid_t otherpid;
+
   struct pidfh* pfh = pidfile_open("/var/run/daemon.pid", 0600, &otherpid);
   if (pfh == NULL) {
     if (errno == EEXIST) {
