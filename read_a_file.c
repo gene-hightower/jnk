@@ -49,6 +49,8 @@ char* read_file(char const* pathname)
         continue;
       fprintf(stderr, "error from read from %s, size=%ld: %s\n", pathname, sz,
               strerror(errno));
+      free(bfr); /* no partial data returned */
+      bfr = NULL;
       goto do_return;
     }
 
