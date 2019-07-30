@@ -12,6 +12,9 @@
 
 char* read_file(char const* pathname)
 {
+  if (pathname == NULL)
+    return NULL;
+
   char* bfr = NULL;
 
   int fd = open(pathname, O_RDONLY);
