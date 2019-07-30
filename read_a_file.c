@@ -66,15 +66,19 @@ do_return:
   return bfr;
 }
 
+void test_it(char const* pathname)
+{
+  char* bfr = read_file(pathname);
+  if (bfr) {
+    printf("%s is %ld bytes\n", pathname, strlen(bfr));
+    free(bfr);
+  }
+}
+
 int main()
 {
-  char* dev_null = read_file("/dev/null");
-
-  char* dev_random = read_file("/dev/random");
-
-  char* read_a_file = read_file("./read_a_file.c");
-
-  printf("%ld bytes\n", strlen(read_a_file));
-
-  free(read_a_file);
+  test_it("/etc/shadow");
+  test_it("/dev/null");
+  test_it("/dev/random");
+  test_it("./read_a_file.c");
 }
