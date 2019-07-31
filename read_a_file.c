@@ -17,7 +17,7 @@ char* read_file(char const* pathname)
 
   char* bfr = NULL;
 
-  int fd = open(pathname, O_RDONLY);
+  const int fd = open(pathname, O_RDONLY);
 
   if (fd == -1) {
     fprintf(stderr, "error from open of %s: %s\n", pathname, strerror(errno));
@@ -46,7 +46,7 @@ char* read_file(char const* pathname)
   bp[sz] = '\0';
 
   while (sz) {
-    ssize_t bytes_read = read(fd, bp, sz);
+    const ssize_t bytes_read = read(fd, bp, sz);
     if (bytes_read == -1) {
       if (errno == EINTR)
         continue;
