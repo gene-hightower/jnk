@@ -38,7 +38,7 @@ char* read_file(char const* pathname)
   size_t sz = sb.st_size;
 
   bfr = malloc(sz + 1);
-  if (bfr == NULL) /* will never happen on Linux */
+  if (bfr == NULL) /* may never happen on Linux */
     goto close_fd_return_bfr;
 
   char* bp = bfr;
