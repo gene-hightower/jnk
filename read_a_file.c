@@ -21,25 +21,25 @@ char* read_file(char const* pathname)
 
   if (fd == -1) {
     fprintf(stderr, "error from open of %s: %s\n", pathname, strerror(errno));
-    goto do_return;
+    goto close_fd_return_bfr;
   }
 
   struct stat sb;
   if (fstat(fd, &sb) == -1) {
     fprintf(stderr, "error from fstat of %s: %s\n", pathname, strerror(errno));
-    goto do_return;
+    goto close_fd_return_bfr;
   }
 
   if ((sb.st_mode & S_IFMT) != S_IFREG) {
     fprintf(stderr, "not a regular file %s\n", pathname);
-    goto do_return;
+    goto close_fd_return_bfr;
   }
 
   size_t sz = sb.st_size;
 
   bfr = malloc(sz + 1);
   if (bfr == NULL) /* will never happen on Linux */
-    goto do_return;
+    goto close_fd_return_bfr;
 
   char* bp = bfr;
 
@@ -54,14 +54,14 @@ char* read_file(char const* pathname)
               strerror(errno));
       free(bfr); /* no partial data returned */
       bfr = NULL;
-      goto do_return;
+      goto close_fd_return_bfr;
     }
 
     bp += bytes_read;
     sz -= bytes_read;
   }
 
-do_return:
+close_fd_return_bfr:
 
   if (fd != -1)
     close(fd);
