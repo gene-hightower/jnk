@@ -30,7 +30,7 @@ char* read_file(char const* pathname)
     goto close_fd_return_bfr;
   }
 
-  if ((sb.st_mode & S_IFMT) != S_IFREG) {
+  if (!S_ISREG(sb.st_mode)) {
     fprintf(stderr, "not a regular file %s\n", pathname);
     goto close_fd_return_bfr;
   }
@@ -84,4 +84,6 @@ int main()
   test_it("/dev/null");
   test_it("/dev/random");
   test_it("./read_a_file.c");
+
+  return 0;
 }
