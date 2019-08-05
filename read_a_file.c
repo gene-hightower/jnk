@@ -40,10 +40,9 @@ char* read_file(char const* pathname)
   bfr = malloc(sz + 1);
   if (bfr == NULL) /* may never happen on Linux */
     goto close_fd_return_bfr;
+  bfr[sz] = '\0';
 
   char* bp = bfr;
-
-  bp[sz] = '\0';
 
   while (sz) {
     const ssize_t bytes_read = read(fd, bp, sz);
