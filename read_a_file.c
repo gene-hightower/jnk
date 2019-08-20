@@ -89,6 +89,7 @@ void test_it(char const* pathname)
 
 int main()
 {
+  test_it("/some-non-file");
   test_it("/etc/shadow");
   test_it("/dev/null");
   test_it("/dev/random");
