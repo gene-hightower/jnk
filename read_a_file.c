@@ -32,7 +32,7 @@ char* read_fd(int fd, char const* pathname)
 
   size_t sz = sb.st_size;
 
-  char* bfr = malloc(sz + 1);
+  char* bfr = (char*) malloc(sz + 1);
   if (bfr == NULL) /* may never happen on Linux */
     return NULL;
   bfr[sz] = '\0';
