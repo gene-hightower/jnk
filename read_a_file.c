@@ -95,7 +95,7 @@ int main()
   test_it("/etc/shadow");
   test_it("/dev/null");
   test_it("/dev/random");
-  test_it("./" __FILE__);
+  test_it(__FILE__);
 
   return 0;
 }
