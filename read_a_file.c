@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ERR_BFR_SZ 256
+
 char* read_fd(int fd, char const* pathname)
 {
   if (pathname == NULL)
@@ -17,7 +19,7 @@ char* read_fd(int fd, char const* pathname)
 
   struct stat sb;
   if (fstat(fd, &sb) == -1) {
-    char err_bfr[256];
+    char err_bfr[ERR_BFR_SZ];
     strerror_r(errno, err_bfr, sizeof(err_bfr));
     fprintf(stderr, "error from fstat of %s: %s\n", pathname, err_bfr);
     return NULL;
@@ -42,7 +44,7 @@ char* read_fd(int fd, char const* pathname)
     if (bytes_read == -1) {
       if (errno == EINTR)
         continue;
-      char err_bfr[256];
+      char err_bfr[ERR_BFR_SZ];
       strerror_r(errno, err_bfr, sizeof(err_bfr));
       fprintf(stderr, "error from read from %s, size=%ld: %s\n",
               pathname, sz, err_bfr);
@@ -65,7 +67,7 @@ char* read_file(char const* pathname)
   const int fd = open(pathname, O_RDONLY);
 
   if (fd == -1) {
-    char err_bfr[256];
+    char err_bfr[ERR_BFR_SZ];
     strerror_r(errno, err_bfr, sizeof(err_bfr));
     fprintf(stderr, "error from open of %s: %s\n", pathname, err_bfr);
     return NULL;
