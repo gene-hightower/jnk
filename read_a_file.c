@@ -10,36 +10,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* read_file(char const* pathname)
+char* read_fd(int fd, char const* pathname)
 {
   if (pathname == NULL)
-    return NULL;
-
-  char* bfr = NULL;
-
-  const int fd = open(pathname, O_RDONLY);
-
-  if (fd == -1) {
-    fprintf(stderr, "error from open of %s: %s\n", pathname, strerror(errno));
-    goto close_fd_return_bfr;
-  }
+    pathname = "<unknown>";
 
   struct stat sb;
   if (fstat(fd, &sb) == -1) {
     fprintf(stderr, "error from fstat of %s: %s\n", pathname, strerror(errno));
-    goto close_fd_return_bfr;
+    return NULL;
   }
 
   if (!S_ISREG(sb.st_mode)) {
     fprintf(stderr, "not a regular file %s\n", pathname);
-    goto close_fd_return_bfr;
+    return NULL;
   }
 
   size_t sz = sb.st_size;
 
-  bfr = malloc(sz + 1);
+  char* bfr = malloc(sz + 1);
   if (bfr == NULL) /* may never happen on Linux */
-    goto close_fd_return_bfr;
+    return NULL;
   bfr[sz] = '\0';
 
   char* bp = bfr;
@@ -52,18 +43,31 @@ char* read_file(char const* pathname)
       fprintf(stderr, "error from read from %s, size=%ld: %s\n", pathname, sz,
               strerror(errno));
       free(bfr); /* no partial data returned */
-      bfr = NULL;
-      goto close_fd_return_bfr;
+      return NULL;
     }
 
     bp += bytes_read;
     sz -= bytes_read;
   }
 
-close_fd_return_bfr:
+  return bfr;
+}
 
-  if (fd != -1)
-    close(fd);
+char* read_file(char const* pathname)
+{
+  if (pathname == NULL)
+    return NULL;
+
+  const int fd = open(pathname, O_RDONLY);
+
+  if (fd == -1) {
+    fprintf(stderr, "error from open of %s: %s\n", pathname, strerror(errno));
+    return NULL;
+  }
+
+  char* bfr = read_fd(fd, pathname);
+
+  close(fd);
 
   return bfr;
 }
